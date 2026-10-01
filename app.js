@@ -19,11 +19,26 @@
   };
 
   /* Google Sheets / Form एकीकरण:
-     - SHEET_CSV_URL: "Published" ट्याबको publish-to-web CSV लिङ्क (सेटअप: GOOGLE_SHEETS_SETUP.md हेर्नुहोस्)
+     - SHEET_CSV_URL: Responses ट्याबको publish-to-web CSV लिङ्क (सेटअप: GOOGLE_SHEETS_SETUP.md हेर्नुहोस्)
      - TIP_FORM_URL: टिप सङ्कलन गर्ने Google Form को लिङ्क
      दुवै खाली छाडेमा साइट data.js का प्रविष्टिबाट मात्र चल्छ। */
   const SHEET_CSV_URL = "";
-  const TIP_FORM_URL = "";
+  const TIP_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSeS6nOJSoQiZzhKWm8R2wO2Q9MroRTWBAokT_g24TKdrguzLg/viewform?usp=publish-editor";
+
+  // Sheet का हेडर (नेपाली वा English) → प्रविष्टि फिल्ड
+  const SHEET_FIELDS = {
+    title: ["घटनाको शीर्षक", "title"],
+    dateBS: ["मिति (वि.सं", "dateBS"],
+    dateAD: ["मिति (ई.सं", "dateAD"],
+    category: ["श्रेणी", "category"],
+    summary: ["छोटो सारांश", "summary"],
+    details: ["पूरा विवरण", "details"],
+    status: ["साक्ष्य-स्तर", "status"],
+    sourceLabel: ["स्रोतको नाम", "sourceLabel"],
+    sourceUrl: ["स्रोतको लिङ्क", "sourceUrl"],
+    tags: ["ट्यागहरू", "tags"]
+  };
+  const APPROVED_VALUES = ["हो", "होस्", "हुन्छ", "yes", "y", "ok"]; // "स्वीकृत" स्तम्भका मान्य मान
 
   const listEl = document.getElementById("entry-list");
   const noResultsEl = document.getElementById("no-results");
@@ -59,6 +74,14 @@
     return rows.filter(r => r.some(f => f.trim() !== ""));
   }
 
+  function findCol(head, candidates) {
+    for (const c of candidates) {
+      const i = head.findIndex(h => h === c || h.indexOf(c) === 0);
+      if (i >= 0) return i;
+    }
+    return -1;
+  }
+
   async function loadSheetEntries() {
     if (!SHEET_CSV_URL) return [];
     try {
@@ -67,19 +90,28 @@
       const rows = parseCSV(await res.text());
       if (rows.length < 2) return [];
       const head = rows[0].map(h => h.trim());
-      const at = n => head.indexOf(n);
-      const g = (r, n) => (at(n) >= 0 ? (r[at(n)] || "").trim() : "");
+      const col = {};
+      for (const k in SHEET_FIELDS) col[k] = findCol(head, SHEET_FIELDS[k]);
+      const modIdx = findCol(head, ["स्वीकृत", "approved"]);
+      if (modIdx < 0) {
+        console.warn('Sheet मा "स्वीकृत" स्तम्भ भेटिएन; कुनै टिप प्रकाशन गरिएन।');
+        return [];
+      }
+      const g = (r, k) => (col[k] >= 0 ? (r[col[k]] || "").trim() : "");
       return rows.slice(1).map((r, i) => {
+        const approved = (r[modIdx] || "").trim().toLowerCase();
+        if (!APPROVED_VALUES.includes(approved)) return null;
         const title = g(r, "title");
         if (!title) return null;
         const srcUrl = g(r, "sourceUrl"), srcLabel = g(r, "sourceLabel");
+        const status = g(r, "status");
         return {
           id: "sheet-" + (i + 1),
           dateBS: g(r, "dateBS") || "मिति नखुलेको",
           dateAD: g(r, "dateAD") || "",
           title: title,
           category: g(r, "category") || "सुशासन",
-          status: g(r, "status") || "समाचारमा आएको",
+          status: STATUS_CLASS[status] ? status : "समाचारमा आएको",
           summary: g(r, "summary") || "",
           details: g(r, "details") || g(r, "summary") || "",
           sources: srcUrl ? [{ label: srcLabel || "स्रोत", url: srcUrl }] : [],
