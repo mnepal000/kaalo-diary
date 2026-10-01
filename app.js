@@ -18,6 +18,13 @@
     "न्यायपालिका": "#6a5a8a"
   };
 
+  /* Google Sheets / Form एकीकरण:
+     - SHEET_CSV_URL: "Published" ट्याबको publish-to-web CSV लिङ्क (सेटअप: GOOGLE_SHEETS_SETUP.md हेर्नुहोस्)
+     - TIP_FORM_URL: टिप सङ्कलन गर्ने Google Form को लिङ्क
+     दुवै खाली छाडेमा साइट data.js का प्रविष्टिबाट मात्र चल्छ। */
+  const SHEET_CSV_URL = "";
+  const TIP_FORM_URL = "";
+
   const listEl = document.getElementById("entry-list");
   const noResultsEl = document.getElementById("no-results");
   const searchEl = document.getElementById("search");
@@ -30,13 +37,70 @@
 
   let activeCat = "सबै";
   let activeStatus = "सबै";
+  let ALL = []; // sheet entries (newest first) + ENTRIES
+
+  // --- Google Sheet CSV parser (RFC4180-style: quoted fields, commas, newlines) ---
+  function parseCSV(text) {
+    const rows = [];
+    let row = [], field = "", inQ = false;
+    for (let i = 0; i < text.length; i++) {
+      const c = text[i];
+      if (inQ) {
+        if (c === '"') {
+          if (text[i + 1] === '"') { field += '"'; i++; }
+          else inQ = false;
+        } else field += c;
+      } else if (c === '"') inQ = true;
+      else if (c === ',') { row.push(field); field = ""; }
+      else if (c === '\n') { row.push(field); rows.push(row); row = []; field = ""; }
+      else if (c !== '\r') field += c;
+    }
+    if (field !== "" || row.length) { row.push(field); rows.push(row); }
+    return rows.filter(r => r.some(f => f.trim() !== ""));
+  }
+
+  async function loadSheetEntries() {
+    if (!SHEET_CSV_URL) return [];
+    try {
+      const res = await fetch(SHEET_CSV_URL, { cache: "no-store" });
+      if (!res.ok) return [];
+      const rows = parseCSV(await res.text());
+      if (rows.length < 2) return [];
+      const head = rows[0].map(h => h.trim());
+      const at = n => head.indexOf(n);
+      const g = (r, n) => (at(n) >= 0 ? (r[at(n)] || "").trim() : "");
+      return rows.slice(1).map((r, i) => {
+        const title = g(r, "title");
+        if (!title) return null;
+        const srcUrl = g(r, "sourceUrl"), srcLabel = g(r, "sourceLabel");
+        return {
+          id: "sheet-" + (i + 1),
+          dateBS: g(r, "dateBS") || "मिति नखुलेको",
+          dateAD: g(r, "dateAD") || "",
+          title: title,
+          category: g(r, "category") || "सुशासन",
+          status: g(r, "status") || "समाचारमा आएको",
+          summary: g(r, "summary") || "",
+          details: g(r, "details") || g(r, "summary") || "",
+          sources: srcUrl ? [{ label: srcLabel || "स्रोत", url: srcUrl }] : [],
+          tags: g(r, "tags").split(/[,;]/).map(t => t.trim()).filter(Boolean),
+          origin: "पाठक टिप"
+        };
+      }).filter(Boolean);
+    } catch (err) {
+      console.warn("Sheet बाट प्रविष्टि लोड हुन सकेन:", err);
+      return [];
+    }
+  }
 
   // --- stats ---
-  const cats = [...new Set(ENTRIES.map(e => e.category))];
-  const srcCount = ENTRIES.reduce((n, e) => n + (e.sources ? e.sources.length : 0), 0);
-  document.getElementById("stat-total").textContent = ENTRIES.length;
-  document.getElementById("stat-cats").textContent = cats.length;
-  document.getElementById("stat-sources").textContent = srcCount;
+  function renderStats() {
+    const cats = [...new Set(ALL.map(e => e.category))];
+    const srcCount = ALL.reduce((n, e) => n + (e.sources ? e.sources.length : 0), 0);
+    document.getElementById("stat-total").textContent = ALL.length;
+    document.getElementById("stat-cats").textContent = cats.length;
+    document.getElementById("stat-sources").textContent = srcCount;
+  }
 
   // --- chips ---
   function buildChips(el, items, getActive, setActive) {
@@ -50,8 +114,9 @@
     });
   }
   function refreshChips() {
+    const cats = [...new Set(ALL.map(e => e.category))];
     buildChips(catChipsEl, ["सबै", ...cats], () => activeCat, v => activeCat = v);
-    const statuses = [...new Set(ENTRIES.map(e => e.status))];
+    const statuses = [...new Set(ALL.map(e => e.status))];
     buildChips(statusChipsEl, ["सबै", ...statuses], () => activeStatus, v => activeStatus = v);
   }
 
@@ -78,7 +143,7 @@
   }
 
   function render() {
-    const items = ENTRIES.filter(matches);
+    const items = ALL.filter(matches);
     listEl.innerHTML = "";
     noResultsEl.classList.toggle("hidden", items.length > 0);
     items.forEach((e, i) => {
@@ -97,6 +162,7 @@
         "<p>" + escapeHtml(e.summary) + "</p>" +
         '<div class="entry-meta">' +
           '<span class="tag ' + (STATUS_CLASS[e.status] || "") + '">साक्ष्य: ' + escapeHtml(e.status) + "</span>" +
+          (e.origin ? '<span class="tag origin">' + escapeHtml(e.origin) + "</span>" : "") +
           '<span class="read-more">पूरा पढ्नुहोस् &rarr;</span>' +
         "</div>";
       card.addEventListener("click", () => openModal(e));
@@ -124,7 +190,8 @@
     modalBody.innerHTML =
       '<span class="page-date">' + escapeHtml(e.dateBS) + " · " + escapeHtml(e.dateAD) + "</span>" +
       "<h3>" + escapeHtml(e.title) + "</h3>" +
-      '<div class="entry-meta"><span class="tag ' + (STATUS_CLASS[e.status] || "") + '">साक्ष्य-स्तर: ' + escapeHtml(e.status) + "</span></div>" +
+      '<div class="entry-meta"><span class="tag ' + (STATUS_CLASS[e.status] || "") + '">साक्ष्य-स्तर: ' + escapeHtml(e.status) + "</span>" +
+      (e.origin ? '<span class="tag origin">' + escapeHtml(e.origin) + "</span>" : "") + "</div>" +
       "<p>" + escapeHtml(e.details) + "</p>" +
       (srcList ? '<div class="sources"><strong>स्रोतहरू:</strong><ul>' + srcList + "</ul></div>" : "") +
       '<div class="disclaimer-box">यो प्रविष्टि नागरिक दस्तावेजीकरण हो। &lsquo;' + escapeHtml(e.status) +
@@ -154,6 +221,16 @@
   searchEl.addEventListener("input", render);
 
   // --- init ---
-  refreshChips();
-  render();
+  async function init() {
+    if (TIP_FORM_URL) {
+      const btn = document.getElementById("tip-form-btn");
+      if (btn) { btn.href = TIP_FORM_URL; btn.classList.remove("hidden"); }
+    }
+    const sheetEntries = await loadSheetEntries();
+    ALL = [...sheetEntries, ...ENTRIES];
+    renderStats();
+    refreshChips();
+    render();
+  }
+  init();
 })();

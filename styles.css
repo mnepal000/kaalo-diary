@@ -230,6 +230,10 @@ a:hover { color: #e3c476; }
 .st-confirmed { border-color: #3f7a3a; color: #2f6b2a; background: rgba(143,208,138,0.16); }
 .st-investigation { border-color: #6a5a8a; color: #574a75; background: rgba(185,168,224,0.16); }
 .st-rebutted { border-color: #999; color: #666; background: rgba(150,150,150,0.14); }
+.tag.origin {
+  border-color: var(--gold); color: #7d6116;
+  background: rgba(201, 164, 74, 0.18); font-weight: 600;
+}
 
 /* ---------- Pinned notes ---------- */
 .note {
@@ -261,6 +265,11 @@ a:hover { color: #e3c476; }
   margin: 8px 0;
 }
 .btn:hover { background: #a93226; }
+.btn-secondary {
+  background: transparent; border: 1px solid var(--gold);
+  color: var(--gold) !important; margin-left: 10px;
+}
+.btn-secondary:hover { background: rgba(201, 164, 74, 0.12); }
 .about-list { margin: 0; padding-left: 20px; }
 .about-list li { margin-bottom: 10px; }
 
