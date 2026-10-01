@@ -6,7 +6,8 @@
 <title>कालो डायरी | बालेन्द्र शाह सरकारका विवाद र अनियमितताको नागरिक दस्तावेज</title>
 <meta name="description" content="कालो डायरी: बालेन्द्र शाह नेतृत्वको सरकारका विवाद, अनियमितता र जवाफदेहिताका प्रश्नहरूको नागरिक दस्तावेजीकरण पोर्टल।">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&family=Kalam:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -21,7 +22,7 @@
       </div>
     </div>
     <nav class="nav">
-      <a href="#entries">प्रविष्टिहरू</a>
+      <a href="#entries">पानाहरू</a>
       <a href="#timeline-note">पृष्ठभूमि</a>
       <a href="#submit">टिप पठाउनुहोस्</a>
       <a href="#about">हाम्रो बारेमा</a>
@@ -30,19 +31,39 @@
 </header>
 
 <section class="hero">
-  <div class="wrap">
-    <p class="hero-kicker">नागरिक निगरानी (वाचडग) पोर्टल</p>
-    <h2>बालेन्द्र शाह सरकारका <span class="accent">विवाद</span> र <span class="accent">अनियमितता</span>को दस्तावेज</h2>
-    <p class="hero-desc">
-      २७ जेठ २०८३ मा प्रतिनिधिसभामा नेपाली कांग्रेस संसदीय दलका नेता भीष्मराज आङ्देम्बेले
-      &lsquo;कालो डायरी&rsquo; अभियानको जिकिर गर्नुभएको थियो &mdash; मतदाताले सरकारका एक-एक कर्मको
-      टिपोट राख्ने डायरी। यो पोर्टल त्यही विचारलाई निरन्तरता दिने नागरिक प्रयास हो:
-      तथ्य, मिति र स्रोतसहितको खुला दस्तावेज।
-    </p>
-    <div class="stats" id="stats">
-      <div class="stat"><span class="stat-num" id="stat-total">0</span><span class="stat-label">कुल प्रविष्टि</span></div>
-      <div class="stat"><span class="stat-num" id="stat-cats">0</span><span class="stat-label">श्रेणी</span></div>
-      <div class="stat"><span class="stat-num" id="stat-sources">0</span><span class="stat-label">स्रोत लिङ्क</span></div>
+  <div class="wrap hero-grid">
+    <div class="hero-text">
+      <p class="hero-kicker">नागरिक निगरानी (वाचडग) पोर्टल</p>
+      <h2>बालेन्द्र शाह सरकारका <span class="accent">विवाद</span> र <span class="accent">अनियमितता</span>को दस्तावेज</h2>
+      <p class="hero-desc">
+        २७ जेठ २०८३ मा प्रतिनिधिसभामा नेपाली कांग्रेस संसदीय दलका नेता भीष्मराज आङ्देम्बेले
+        &lsquo;कालो डायरी&rsquo; अभियानको जिकिर गर्नुभएको थियो &mdash; मतदाताले सरकारका एक-एक कर्मको
+        टिपोट राख्ने डायरी। यो पोर्टल त्यही विचारलाई निरन्तरता दिने नागरिक प्रयास हो:
+        तथ्य, मिति र स्रोतसहितको खुला दस्तावेज।
+      </p>
+      <div class="stats" id="stats">
+        <div class="stat"><span class="stat-num" id="stat-total">0</span><span class="stat-label">कुल प्रविष्टि</span></div>
+        <div class="stat"><span class="stat-num" id="stat-cats">0</span><span class="stat-label">श्रेणी</span></div>
+        <div class="stat"><span class="stat-num" id="stat-sources">0</span><span class="stat-label">स्रोत लिङ्क</span></div>
+      </div>
+    </div>
+    <div class="diary-wrap">
+      <div class="diary" id="diary" aria-hidden="true">
+        <div class="inside">
+          <p class="inside-date">२७ जेठ २०८३</p>
+          <p>प्रिय डायरी,</p>
+          <p>आजदेखि सरकारका<br>एक-एक कर्मको<br>टिपोट राख्न थालेँ।</p>
+          <p class="inside-sign">&mdash; जनता</p>
+        </div>
+        <div class="pages-edge"></div>
+        <div class="cover">
+          <div class="cover-spine"></div>
+          <div class="cover-title">कालो<br>डायरी</div>
+          <div class="cover-sub">जनताको हिसाब</div>
+          <div class="band"></div>
+        </div>
+      </div>
+      <p class="diary-hint">स्क्रोल गर्दा डायरी खुल्छ &darr;</p>
     </div>
   </div>
 </section>
@@ -51,8 +72,8 @@
 
   <section id="entries" class="section">
     <div class="section-head">
-      <h3>डायरीका पानाहरू</h3>
-      <p class="muted">नयाँदेखि पुरानो क्रममा &mdash; प्रत्येक प्रविष्टिमा स्रोत र साक्ष्य-स्तर उल्लेख छ।</p>
+      <h3 class="hand">डायरीका पानाहरू</h3>
+      <p class="muted">स्क्रोल गर्दै जाँदा पानाहरू खुल्दै जान्छन् &mdash; नयाँदेखि पुरानो क्रममा।</p>
     </div>
 
     <div class="controls">
@@ -61,56 +82,66 @@
       <div class="chips" id="status-chips"></div>
     </div>
 
-    <div id="entry-list" class="entry-list"></div>
+    <div id="entry-list" class="pages"></div>
     <p id="no-results" class="muted hidden">कुनै प्रविष्टि भेटिएन। खोज वा फिल्टर परिवर्तन गर्नुहोस्।</p>
   </section>
 
-  <section id="timeline-note" class="section card">
-    <h3>पृष्ठभूमि: &lsquo;कालो डायरी&rsquo; कहाँबाट आयो?</h3>
-    <p>
-      २७ जेठ २०८३ (१० जुन २०२६) मा प्रतिनिधिसभाको बैठकमा भीष्मराज आङ्देम्बेले भन्नुभयो:
-      <em>&ldquo;मैले सुनेको छु &mdash; गएको निर्वाचनमा मत दिएका मध्ये कतिपयले &lsquo;कालो डायरी&rsquo;
-      अभियान शुरु गरेका छन्। त्यो डायरीमा तिनले तपाईंका एक-एक कर्मको सायद टिपोट गरेर राख्नेछन्।&rdquo;</em>
-      उहाँले त्यसै भाषणमा सरकारका आठवटा &lsquo;गर्न नहुने काम&rsquo; पढ्नुभयो, जुन यस पोर्टलका
-      पहिलो आठ प्रविष्टि हुन्। त्यसपछि १५ असोज २०८३ का नयाँ घटनाहरू थपिएका छन्।
-    </p>
-    <p class="muted small">
-      स्रोत: <a href="https://www.odapalika.com/detail/10745/" target="_blank" rel="noopener">पूरै भाषण (ओडापालिका)</a> &middot;
-      <a href="https://globalsambadmedia.com/भीष्मराजलाई-पितामह-बन्ने/" target="_blank" rel="noopener">टिप्पणी (ग्लोबल सम्बाद)</a>
-    </p>
+  <section id="timeline-note" class="section">
+    <article class="note">
+      <span class="tape"></span>
+      <h3 class="hand">&lsquo;कालो डायरी&rsquo; कहाँबाट आयो?</h3>
+      <p>
+        २७ जेठ २०८३ (१० जुन २०२६) मा प्रतिनिधिसभाको बैठकमा भीष्मराज आङ्देम्बेले भन्नुभयो:
+        <em>&ldquo;मैले सुनेको छु &mdash; गएको निर्वाचनमा मत दिएका मध्ये कतिपयले &lsquo;कालो डायरी&rsquo;
+        अभियान शुरु गरेका छन्। त्यो डायरीमा तिनले तपाईंका एक-एक कर्मको सायद टिपोट गरेर राख्नेछन्।&rdquo;</em>
+        उहाँले त्यसै भाषणमा सरकारका आठवटा &lsquo;गर्न नहुने काम&rsquo; पढ्नुभयो, जुन यस पोर्टलका
+        पहिलो आठ प्रविष्टि हुन्। त्यसपछि १५ असोज २०८३ का नयाँ घटनाहरू थपिएका छन्।
+      </p>
+      <p class="muted small">
+        स्रोत: <a href="https://www.odapalika.com/detail/10745/" target="_blank" rel="noopener">पूरै भाषण (ओडापालिका)</a> &middot;
+        <a href="https://globalsambadmedia.com/भीष्मराजलाई-पितामह-बन्ने/" target="_blank" rel="noopener">टिप्पणी (ग्लोबल सम्बाद)</a>
+      </p>
+    </article>
   </section>
 
-  <section id="submit" class="section card">
-    <h3>टिप पठाउनुहोस्</h3>
-    <p>
-      तपाईंसँग सरकारका कुनै विवाद, अनियमितता वा जवाफदेहिताको प्रश्नबारे तथ्य, मिति र स्रोत छ भने
-      पठाउनुहोस्। सम्पादन टोलीले जाँचेर मात्र डायरीमा थप्नेछ।
-    </p>
-    <a class="btn" href="mailto:tip@kaalodiary.example?subject=कालो डायरीका लागि टिप">टिप इमेल गर्नुहोस्</a>
-    <p class="muted small">कृपया सकेसम्म मिति, स्थान र समाचार/कागजातको लिङ्कसहित पठाउनुहोस्। नाम गोप्य राख्न अनुरोध गर्न सक्नुहुन्छ।</p>
+  <section id="submit" class="section">
+    <article class="note">
+      <span class="tape"></span>
+      <h3 class="hand">टिप पठाउनुहोस्</h3>
+      <p>
+        तपाईंसँग सरकारका कुनै विवाद, अनियमितता वा जवाफदेहिताको प्रश्नबारे तथ्य, मिति र स्रोत छ भने
+        पठाउनुहोस्। सम्पादन टोलीले जाँचेर मात्र डायरीमा थप्नेछ।
+      </p>
+      <a class="btn" href="mailto:tip@kaalodiary.example?subject=कालो डायरीका लागि टिप">टिप इमेल गर्नुहोस्</a>
+      <p class="muted small">कृपया सकेसम्म मिति, स्थान र समाचार/कागजातको लिङ्कसहित पठाउनुहोस्। नाम गोप्य राख्न अनुरोध गर्न सक्नुहुन्छ।</p>
+    </article>
   </section>
 
-  <section id="about" class="section card">
-    <h3>हाम्रो बारेमा र विधि</h3>
-    <ul class="about-list">
-      <li><strong>उद्देश्य:</strong> सरकारका कामको नागरिक दस्तावेजीकरण &mdash; स्मृति कमजोर हुन्छ, डायरी हुँदैन।</li>
-      <li><strong>साक्ष्य-स्तर:</strong> प्रत्येक प्रविष्टिमा स्थिति खुलाइएको छ &mdash;
-        <span class="tag st-allegation">विपक्षीको आरोप</span>,
-        <span class="tag st-reported">समाचारमा आएको</span>,
-        <span class="tag st-confirmed">पुष्टि भएको</span>,
-        <span class="tag st-investigation">छानबिनमा</span>,
-        <span class="tag st-rebutted">खण्डन भएको</span>।</li>
-      <li><strong>स्रोत:</strong> प्रत्येक दाबीसँग समाचार लिङ्क वा संसदीय रेकर्डको सन्दर्भ। स्रोतबिनाको दाबी प्रकाशन हुँदैन।</li>
-      <li><strong>सुधार नीति:</strong> कुनै तथ्य गलत छ भने प्रमाणसहित जानकारी दिनुहोस्, तुरुन्त सच्याइन्छ।</li>
-      <li><strong>अस्वीकरण:</strong> यो नागरिक दस्तावेजीकरण हो, अदालत होइन। यहाँका &lsquo;आरोप&rsquo;हरू प्रमाणित तथ्य होइनन्; सम्बन्धित पक्षको धारणा वा खण्डन पनि उत्तिकै स्थान पाउँछ।</li>
-    </ul>
+  <section id="about" class="section">
+    <article class="note">
+      <span class="tape"></span>
+      <h3 class="hand">हाम्रो बारेमा र विधि</h3>
+      <ul class="about-list">
+        <li><strong>उद्देश्य:</strong> सरकारका कामको नागरिक दस्तावेजीकरण &mdash; स्मृति कमजोर हुन्छ, डायरी हुँदैन।</li>
+        <li><strong>साक्ष्य-स्तर:</strong> प्रत्येक प्रविष्टिमा स्थिति खुलाइएको छ &mdash;
+          <span class="tag st-allegation">विपक्षीको आरोप</span>,
+          <span class="tag st-reported">समाचारमा आएको</span>,
+          <span class="tag st-confirmed">पुष्टि भएको</span>,
+          <span class="tag st-investigation">छानबिनमा</span>,
+          <span class="tag st-rebutted">खण्डन भएको</span>।</li>
+        <li><strong>स्रोत:</strong> प्रत्येक दाबीसँग समाचार लिङ्क वा संसदीय रेकर्डको सन्दर्भ। स्रोतबिनाको दाबी प्रकाशन हुँदैन।</li>
+        <li><strong>सुधार नीति:</strong> कुनै तथ्य गलत छ भने प्रमाणसहित जानकारी दिनुहोस्, तुरुन्त सच्याइन्छ।</li>
+        <li><strong>अस्वीकरण:</strong> यो नागरिक दस्तावेजीकरण हो, अदालत होइन। यहाँका &lsquo;आरोप&rsquo;हरू प्रमाणित तथ्य होइनन्; सम्बन्धित पक्षको धारणा वा खण्डन पनि उत्तिकै स्थान पाउँछ।</li>
+      </ul>
+    </article>
   </section>
 
 </main>
 
 <footer class="site-footer">
   <div class="wrap">
-    <p><strong>कालो डायरी</strong> &mdash; जनताको डायरी, सरकारको हिसाब।</p>
+    <p class="hand footer-title">कालो डायरी</p>
+    <p>जनताको डायरी, सरकारको हिसाब।</p>
     <p class="muted small">खुला नागरिक प्रयास। तथ्य जाँचेर मात्र प्रकाशन गरिन्छ।</p>
   </div>
 </footer>
