@@ -22,7 +22,7 @@
      - SHEET_CSV_URL: Responses ट्याबको publish-to-web CSV लिङ्क (सेटअप: GOOGLE_SHEETS_SETUP.md हेर्नुहोस्)
      - TIP_FORM_URL: टिप सङ्कलन गर्ने Google Form को लिङ्क
      दुवै खाली छाडेमा साइट data.js का प्रविष्टिबाट मात्र चल्छ। */
-  const SHEET_CSV_URL = "";
+  const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSAoqxcVfLE33bC0zQNuO5oZs26OTxgsymiaQYiWeLZP1o9iTyllRcrCqWAu5oo_9DTA1Vi2lCh3V5I/pub?gid=1816161183&single=true&output=csv";
   const TIP_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSeS6nOJSoQiZzhKWm8R2wO2Q9MroRTWBAokT_g24TKdrguzLg/viewform?usp=publish-editor";
 
   // Sheet का हेडर (नेपाली वा English) → प्रविष्टि फिल्ड
